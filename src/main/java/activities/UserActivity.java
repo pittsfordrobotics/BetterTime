@@ -134,7 +134,7 @@ public class UserActivity {
 
   // login our user
   public void loginUser(String userID) {
-    Platform.runLater(() -> GrizzlyScene.setMessageBoxText("Logging in user: " + userID));
+    Platform.runLater(() -> GrizzlyScene.setMessageBoxText("Logging in user!"));
 
     // grab the current time from system and format it into string
     LocalDateTime loginTime = LocalDateTime.now();
@@ -149,7 +149,7 @@ public class UserActivity {
 
       Platform.runLater(
           () -> {
-            GrizzlyScene.setMessageBoxText("Successfully logged in user: " + userID);
+            GrizzlyScene.setMessageBoxText("Successfully logged in user!");
             GrizzlyScene.clearInput();
           });
     }
@@ -157,7 +157,7 @@ public class UserActivity {
 
   // logout the user
   public void logoutUser(String userID) {
-    Platform.runLater(() -> GrizzlyScene.setMessageBoxText("Logging out user: " + userID));
+    Platform.runLater(() -> GrizzlyScene.setMessageBoxText("Logging out user!"));
 
     // grab the row the user is on
     int userRow =

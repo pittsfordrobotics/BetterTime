@@ -107,7 +107,7 @@ public class LogoutActivity {
     // show user logout text
     Platform.runLater(
         () -> {
-          GrizzlyScene.setMessageBoxText("Logged out user: " + userID);
+          GrizzlyScene.setMessageBoxText("Logged out user!");
           GrizzlyScene.clearInput();
         });
   }
