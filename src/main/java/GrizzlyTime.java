@@ -25,7 +25,7 @@ public class GrizzlyTime extends Application {
   // only initializations that don't have freezing constructor instances should be placed here
   private KeyActivity keyHandlers = new KeyActivity();
 
-  private UpdateNotifier updater = new UpdateNotifier();
+  //private UpdateNotifier updater = new UpdateNotifier();
 
   private LocalDbActivity dbActivity = new LocalDbActivity();
 
@@ -84,14 +84,13 @@ public class GrizzlyTime extends Application {
     primaryStage.setResizable(Constants.kWindowResizable);
     primaryStage.show();
 
-    Platform.runLater(
-        () -> {
-          // show our splash
-          SceneManager.updateScene(Constants.kSplashSceneState);
-          primaryStage.requestFocus();
-          primaryStage.centerOnScreen();
-          LoggingUtils.log(Level.INFO, "Run first");
-        });
+    // show our splash
+    if (Platform.isFxApplicationThread()) {
+      setupSplash(primaryStage);
+      LoggingUtils.log(Level.INFO, "Splash screen shown from original thread.");
+    } else {
+      Platform.runLater(() -> setupSplash(primaryStage));
+    }
 
     // queue our updates
     Platform.runLater(
@@ -100,7 +99,7 @@ public class GrizzlyTime extends Application {
           // we display application
           SceneManager.updateScene(Constants.kLoadMainScene);
           AlertUtils.stage = primaryStage;
-          updater.checkUpdates();
+          // updater.checkUpdates();
           keyHandlers.setKeyHandlers(scene, primaryStage);
           LoggingUtils.log(Level.INFO, "Run second");
         });
@@ -113,6 +112,9 @@ public class GrizzlyTime extends Application {
           primaryStage.setWidth(Constants.kMainStageWidth);
           primaryStage.setHeight(Constants.kMainStageHeight);
           primaryStage.centerOnScreen();
+          //AlertUtils.stage = primaryStage;
+          //keyHandlers.setKeyHandlers(scene, primaryStage);
+          //SceneManager.updateScene(Constants.kLoadMainScene);
           SceneManager.updateScene(Constants.kMainSceneState);
           LoggingUtils.log(Level.INFO, "Run third");
         });
@@ -126,5 +128,13 @@ public class GrizzlyTime extends Application {
   private static void globalExceptionHandler(Throwable throwable) {
     LoggingUtils.log(Level.SEVERE, throwable);
     CommonUtils.exitApplication();
+  }
+
+  private static void setupSplash(Stage primaryStage)
+  {
+    SceneManager.updateScene(Constants.kSplashSceneState);
+    primaryStage.requestFocus();
+    primaryStage.centerOnScreen();
+    LoggingUtils.log(Level.INFO, "Run first");
   }
 }
