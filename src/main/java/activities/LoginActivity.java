@@ -16,8 +16,6 @@ public class LoginActivity {
 
   private DatabaseUtils dbUtils;
 
-  // public static final boolean grizzlyPrompt = LocalDbActivity.kGrizzlyVerification;
-
   public LoginActivity(DatabaseUtils dbUtils) {
     this.dbUtils = dbUtils;
   }

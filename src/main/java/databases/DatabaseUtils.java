@@ -1,6 +1,5 @@
 package databases;
 
-import activities.LoginActivity;
 import helpers.Constants;
 import helpers.LoggingUtils;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ public class DatabaseUtils {
   private List<List<Object>> mainWorksheet;
   private List<List<Object>> loggedHours;
   private List<List<Object>> currentWorksheet;
-  private List<List<Object>> registrationData;
 
   // initial grab of worksheet data
   public DatabaseUtils() {
@@ -25,7 +23,6 @@ public class DatabaseUtils {
     currentWorksheet = dbProcess.returnWorksheetData(Constants.kMainSheet);
     mainWorksheet = currentWorksheet;
     loggedHours = dbProcess.returnWorksheetData(Constants.kLogSheet);
-    //updateStudentRegistrationData();
   }
 
   // helper method called at beginning of each method to retrieve updated data
@@ -33,7 +30,6 @@ public class DatabaseUtils {
     currentWorksheet = dbProcess.returnWorksheetData(Constants.kMainSheet);
     mainWorksheet = currentWorksheet;
     loggedHours = dbProcess.returnWorksheetData(Constants.kLogSheet);
-    //updateStudentRegistrationData();
   }
 
   public void setCellDataBatch(ArrayList<BatchUpdateData> data, int page) {
@@ -41,13 +37,6 @@ public class DatabaseUtils {
 
     dbProcess.updateSpreadSheetBatch(data, page);
   }
-
-  // update registration data sheet
-  // private void updateStudentRegistrationData() {
-  //   if (LoginActivity.grizzlyPrompt) {
-  //     registrationData = dbProcess.returnWorksheetData(Constants.kRegistrationSheet);
-  //   }
-  // }
 
   // grabs column data from sheet
   public ArrayList<String> getColumnData(int column, int page) {
@@ -188,9 +177,6 @@ public class DatabaseUtils {
       case Constants.kLogSheet:
         mainWorksheet = loggedHours;
         break;
-      // case Constants.kRegistrationSheet:
-      //   mainWorksheet = registrationData;
-      //   break;
       default:
         break;
     }

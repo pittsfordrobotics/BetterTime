@@ -9,12 +9,10 @@ public class SceneManager {
   private static GrizzlyScene grizzlyScene;
   private static CreditsScene creditsScene;
   private static SplashScene splashScene;
-  private static OptionScene optionScene;
 
   private static boolean initGrizzlyScene = false;
   private static boolean initCreditsScene = false;
   private static boolean initSplashScene = false;
-  private static boolean initOptionsScene = false;
 
   private static boolean shownGrizzlyScene = false;
   private static boolean shownCreditsScene = false;

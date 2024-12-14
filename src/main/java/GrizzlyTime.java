@@ -13,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import notifiers.UpdateNotifier;
 import scenes.SceneManager;
 
 public class GrizzlyTime extends Application {
@@ -24,9 +23,6 @@ public class GrizzlyTime extends Application {
 
   // only initializations that don't have freezing constructor instances should be placed here
   private KeyActivity keyHandlers = new KeyActivity();
-
-  //private UpdateNotifier updater = new UpdateNotifier();
-
   private LocalDbActivity dbActivity = new LocalDbActivity();
 
   @Override
@@ -48,7 +44,6 @@ public class GrizzlyTime extends Application {
             CommonUtils.getCurrentDir() + File.separator + "styles" + File.separator + "style.css");
     if (file.exists()) {
       primaryStage.getIcons().add(new Image(file.toURI().toString()));
-
     } else {
       primaryStage
           .getIcons()
