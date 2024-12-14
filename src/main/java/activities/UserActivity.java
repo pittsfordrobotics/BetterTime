@@ -67,9 +67,7 @@ public class UserActivity {
 
       int blankRow = dbUtils.nextEmptyCellColumn(Constants.kMainSheet);
       addUserInfoBasic(userData, userID, data, blankRow);
-      data.add(new BatchUpdateData(blankRow, Constants.kEmailColumn, userData.get(3)));
-      data.add(new BatchUpdateData(blankRow, Constants.kRoleColumn, userData.get(5)));
-      data.add(new BatchUpdateData(blankRow, Constants.kGenderColumn, userData.get(4)));
+      data.add(new BatchUpdateData(blankRow, Constants.kRoleColumn, userData.get(3)));
 
       dbUtils.setCellDataBatch(data, Constants.kMainSheet);
       dbUtils.getUpdatedData();
@@ -100,7 +98,7 @@ public class UserActivity {
   }
 
   private void addUserInfoBasic(
-      ArrayList<String> userData, String userID, ArrayList<BatchUpdateData> data, int i) {
+    ArrayList<String> userData, String userID, ArrayList<BatchUpdateData> data, int i) {
     data.add(new BatchUpdateData(i, Constants.kStudentIdColumn, userID));
     data.add(new BatchUpdateData(i, Constants.kFirstNameColumn, userData.get(1)));
     data.add(new BatchUpdateData(i, Constants.kLastNameColumn, userData.get(2)));
