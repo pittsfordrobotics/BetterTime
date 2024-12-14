@@ -1,6 +1,8 @@
 package activities;
 
 import databases.DatabaseUtils;
+import helpers.AlertUtils;
+import helpers.CommonUtils;
 import helpers.Constants;
 import helpers.LoggingUtils;
 import java.text.SimpleDateFormat;
@@ -10,10 +12,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import javafx.application.Platform;
+import notifiers.LoginNotifier;
+import notifiers.NotifierResult;
 import scenes.GrizzlyScene;
 
 public class LogoutActivity {
   private DatabaseUtils dbUtils;
+  private CommonUtils utils = new CommonUtils();
+  private AlertUtils alertUtils = new AlertUtils();
+  private LoginNotifier notifier = new LoginNotifier();
 
   public LogoutActivity(DatabaseUtils dbUtils) {
     this.dbUtils = dbUtils;
@@ -104,12 +111,15 @@ public class LogoutActivity {
     dbUtils.setCellData(userRowLogout, userTimeColumn, timeTotalDay, Constants.kLogSheet);
     dbUtils.setCellData(userRow, Constants.kTotalHoursColumn, timeTotal, Constants.kMainSheet);
 
-    // show user logout text
-    Platform.runLater(
-        () -> {
-          GrizzlyScene.setMessageBoxText("Logged out user!");
-          GrizzlyScene.clearInput();
-        });
+    NotifierResult result = notifier.checkNotifier(userRow, dbUtils);
+    if (result.hasMessage()) {
+      utils.playDing();
+
+      alertUtils.createAlert(
+          "Reminder!",
+          "Did you remember?",
+          result.getMessage());
+    }
   }
 
   // helper method for grabbing the column that contains the current date

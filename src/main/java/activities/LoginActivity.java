@@ -7,6 +7,7 @@ import helpers.CommonUtils;
 import helpers.Constants;
 import java.util.ArrayList;
 import notifiers.LoginNotifier;
+import notifiers.NotifierResult;
 
 public class LoginActivity {
   private CommonUtils utils = new CommonUtils();
@@ -30,14 +31,14 @@ public class LoginActivity {
 
     dbUtils.setCellDataBatch(data, Constants.kMainSheet);
 
-    if (notifier.checkNotifier(userRow, dbUtils)) {
+    NotifierResult result = notifier.checkNotifier(userRow, dbUtils);
+    if (result.hasMessage()) {
       utils.playDing();
 
       alertUtils.createAlert(
-          "Registration not complete!",
-          "Registration not complete!",
-          "It seems you have not completed your user registration!"
-              + " Please visit https://ycsrobotics.org/registration to finish your registration");
+          "Important message!",
+          "Important message!",
+          result.getMessage());
     }
   }
 }

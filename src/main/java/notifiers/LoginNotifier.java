@@ -3,7 +3,6 @@ package notifiers;
 import databases.DatabaseUtils;
 import helpers.Constants;
 import helpers.LoggingUtils;
-import java.util.ArrayList;
 import java.util.logging.Level;
 
 /**
@@ -11,14 +10,15 @@ import java.util.logging.Level;
  *     Grizzly Robotics specific
  */
 public class LoginNotifier {
-  public boolean checkNotifier(int studentIDRow, DatabaseUtils dbUtils) {
-    String seeMentor = dbUtils.getCellData(studentIDRow, Constants.kSeeMentorColumn, Constants.kMainSheet);
-    if (seeMentor.equalsIgnoreCase("TRUE")) {
+  public NotifierResult checkNotifier(int studentIDRow, DatabaseUtils dbUtils) {
+    String msg = dbUtils.getCellData(studentIDRow, Constants.kImportantMessageColumn, Constants.kMainSheet);
+    
+    if (!msg.equalsIgnoreCase("")) {
       String studentId = dbUtils.getCellData(studentIDRow, Constants.kStudentIdColumn, Constants.kMainSheet);
-      LoggingUtils.log(Level.INFO, studentId + " needs to see a mentor.");
-
-      return true;
+      LoggingUtils.log(Level.INFO, studentId + " has a message: " + msg);
     }
+
+    return new NotifierResult(msg);
 
     // String firstName =
     //     dbUtils.getCellData(studentIDRow, Constants.kFirstNameColumn, Constants.kMainSheet);
@@ -42,8 +42,6 @@ public class LoginNotifier {
     // }
 
     // LoggingUtils.log(Level.INFO, firstName + " was not detected in user registration");
-
-    return false;
   }
 
   // private boolean matchName(String name, ArrayList<String> nameList) {

@@ -223,6 +223,13 @@ public class UserActivity {
 
         logoutActivity.logoutUserWithHours(
             userID, userRow, totalHoursTime, totalTimeFromDifference);
+
+        // show user logout text
+        Platform.runLater(
+          () -> {
+            GrizzlyScene.setMessageBoxText("Logged out user!");
+            GrizzlyScene.clearInput();
+          });
       }
 
       // logout the user

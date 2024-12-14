@@ -13,7 +13,7 @@ public class Constants {
   public static final int kHoursColumn = 6;
   public static final int kTotalHoursColumn = 7;
   public static final int kLoggedInColumn = 8;
-  public static final int kSeeMentorColumn = 9;
+  public static final int kImportantMessageColumn = 9;
 
   // camera feed size
   public static final int kCameraHeight = 400;
