@@ -65,7 +65,6 @@ public class GrizzlyScene {
     // check for custom splash
     if (file.exists()) {
       splash = new Image(file.toURI().toString());
-
     } else {
       splash = new Image(Constants.kErrorImage);
     }

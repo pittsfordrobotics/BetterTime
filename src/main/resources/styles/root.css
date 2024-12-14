@@ -74,8 +74,9 @@ Main Screen CSS
     -fx-border-style: solid;
     -fx-max-width: 250px;
     -fx-padding: 15px;
-    -fx-border-radius: 3px;
+    -fx-border-radius: 9px;
     -fx-background-color: #F2C6DE;
+    -fx-background-radius: 10px;
 }
 
 #hyperlinkBottom {
