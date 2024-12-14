@@ -15,7 +15,7 @@ public class LoginActivity {
 
   private DatabaseUtils dbUtils;
 
-  public static final boolean grizzlyPrompt = LocalDbActivity.kGrizzlyVerification;
+  // public static final boolean grizzlyPrompt = LocalDbActivity.kGrizzlyVerification;
 
   public LoginActivity(DatabaseUtils dbUtils) {
     this.dbUtils = dbUtils;
@@ -30,7 +30,7 @@ public class LoginActivity {
 
     dbUtils.setCellDataBatch(data, Constants.kMainSheet);
 
-    if (grizzlyPrompt && !notifier.checkNotifier(userRow, dbUtils)) {
+    if (notifier.checkNotifier(userRow, dbUtils)) {
       utils.playDing();
 
       alertUtils.createAlert(

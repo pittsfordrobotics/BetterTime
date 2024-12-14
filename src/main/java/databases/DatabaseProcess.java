@@ -361,8 +361,8 @@ public class DatabaseProcess {
       case Constants.kLogSheet:
         return logPage;
 
-      case Constants.kRegistrationSheet:
-        return regPage;
+      // case Constants.kRegistrationSheet:
+      //   return regPage;
 
       default:
         return mainPage;

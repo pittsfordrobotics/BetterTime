@@ -13,6 +13,7 @@ public class Constants {
   public static final int kHoursColumn = 6;
   public static final int kTotalHoursColumn = 7;
   public static final int kLoggedInColumn = 8;
+  public static final int kSeeMentorColumn = 9;
 
   // camera feed size
   public static final int kCameraHeight = 400;
@@ -23,7 +24,7 @@ public class Constants {
   // sheet codes
   public static final int kMainSheet = 0;
   public static final int kLogSheet = 1;
-  public static final int kRegistrationSheet = 2;
+//   public static final int kRegistrationSheet = 2;
 
   // configuration locations
   public static final String kConfigName = "config.json";
