@@ -11,7 +11,6 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
-import javafx.application.Platform;
 import notifiers.LoginNotifier;
 import notifiers.NotifierResult;
 import scenes.GrizzlyScene;
@@ -26,11 +25,10 @@ public class LogoutActivity {
     this.dbUtils = dbUtils;
   }
 
-  public void logoutUserWithHours(
-      String userID, int userRow, LocalTime totalHoursTime, String totalTimeFromDifference) {
+  public void logoutUser(
+      String userID, int userRow, LocalTime totalHoursTime, String totalTimeFromDifference, boolean showReminders) {
     // grab the current total hours
-    String totalHours =
-        dbUtils.getCellData(userRow, Constants.kTotalHoursColumn, Constants.kMainSheet);
+    String totalHours = dbUtils.getCellData(userRow, Constants.kTotalHoursColumn, Constants.kMainSheet);
     String[] prevTotalTime;
     double[] prevTotalTimeNum = new double[3];
 
@@ -64,11 +62,9 @@ public class LogoutActivity {
       totalHour += 1;
     }
 
-    String timeTotal =
-        String.format("%02d:%02d:%02d", (int) totalHour, (int) totalMinute, (int) totalSeconds);
+    String timeTotal = String.format("%02d:%02d:%02d", (int) totalHour, (int) totalMinute, (int) totalSeconds);
 
-    int userRowLogout =
-        dbUtils.getCellRowFromColumn(userID, Constants.kStudentIdColumn, Constants.kLogSheet);
+    int userRowLogout = dbUtils.getCellRowFromColumn(userID, Constants.kStudentIdColumn, Constants.kLogSheet);
 
     // set cell data
     dbUtils.setCellData(
@@ -91,11 +87,10 @@ public class LogoutActivity {
 
     LocalTime tempTotalDayTime;
     try {
-      tempTotalDayTime =
-          LocalTime.parse(totalTimeFromDifference)
-              .plusHours(prevDayTime.getHour())
-              .plusMinutes(prevDayTime.getMinute())
-              .plusSeconds(prevDayTime.getSecond());
+      tempTotalDayTime = LocalTime.parse(totalTimeFromDifference)
+          .plusHours(prevDayTime.getHour())
+          .plusMinutes(prevDayTime.getMinute())
+          .plusSeconds(prevDayTime.getSecond());
 
     } catch (DateTimeParseException e) {
       GrizzlyScene.setMessageBoxText(
@@ -103,22 +98,23 @@ public class LogoutActivity {
       tempTotalDayTime = prevDayTime;
     }
 
-    String timeTotalDay =
-        String.format(
-            "%02d:%02d:%02d",
-            tempTotalDayTime.getHour(), tempTotalDayTime.getMinute(), tempTotalDayTime.getSecond());
+    String timeTotalDay = String.format(
+        "%02d:%02d:%02d",
+        tempTotalDayTime.getHour(), tempTotalDayTime.getMinute(), tempTotalDayTime.getSecond());
 
     dbUtils.setCellData(userRowLogout, userTimeColumn, timeTotalDay, Constants.kLogSheet);
     dbUtils.setCellData(userRow, Constants.kTotalHoursColumn, timeTotal, Constants.kMainSheet);
 
-    NotifierResult result = notifier.checkNotifier(userRow, dbUtils);
-    if (result.hasMessage()) {
-      utils.playDing();
+    if (showReminders) {
+      NotifierResult result = notifier.checkNotifier(userRow, dbUtils);
+      if (result.hasMessage()) {
+        utils.playDing();
 
-      alertUtils.createAlert(
-          "Reminder!",
-          "Did you remember?",
-          result.getMessage());
+        alertUtils.createAlert(
+            "Reminder!",
+            "Did you remember?",
+            result.getMessage());
+      }
     }
   }
 

@@ -1,10 +1,14 @@
 package scenes;
 
+import activities.LogoutAllActivity;
+import helpers.AlertUtils;
 import helpers.Constants;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -17,11 +21,16 @@ import javafx.scene.text.TextAlignment;
  *     credits
  */
 public class CreditsScene {
+  private LogoutAllActivity logoutAllActivity = new LogoutAllActivity();
+  private TextField idBox = new TextField();
+  private Button logoutAllButton = new Button("Logout everyone");
+
   // credits panes
   private GridPane upperPaneMain = new GridPane();
   private GridPane upperPaneRight = new GridPane();
   private GridPane upperPaneLeft = new GridPane();
   private GridPane bottomPaneMain = new GridPane();
+  private GridPane advancedOptions = new GridPane();
   private GridPane mainContent = new GridPane();
   private BorderPane navMenu = new BorderPane();
 
@@ -52,6 +61,7 @@ public class CreditsScene {
 
     mainContent.add(upperPaneMain, 0, 0);
     mainContent.add(bottomPaneMain, 0, 1);
+    mainContent.add(advancedOptions, 0, 2);
 
     mainContent.setAlignment(Pos.CENTER);
     GridPane.setValignment(mainContent, VPos.CENTER);
@@ -107,6 +117,13 @@ public class CreditsScene {
     bottomPaneMain.setId("creditsMain");
     GridPane.setHalignment(bottomPaneMain, HPos.CENTER);
     bottomPaneMain.add(credits, 0, 0);
+
+    advancedOptions.setMaxWidth(500);
+    advancedOptions.setAlignment(Pos.CENTER);
+    advancedOptions.setId("advancedOptions");
+    GridPane.setHalignment(advancedOptions, HPos.CENTER);
+    advancedOptions.add(idBox, 0, 0);
+    advancedOptions.add(logoutAllButton, 1, 0);
   }
 
   private void linkHandlers() {
@@ -114,5 +131,18 @@ public class CreditsScene {
         event -> {
           SceneManager.updateScene(Constants.kMainSceneState);
         });
+
+    logoutAllButton.setOnAction(
+      event -> {
+        String id = idBox.getText();
+        // This should be running on the main thread, but use runLater anyways.
+        Platform.runLater(() -> idBox.setText(""));
+        // Logging out several users can take several seconds.
+        // We're not running this on a separate thread on purpose.
+        // The UI will freeze while doing this, but since this is an admin action
+        // the user should know what they're doing and expect it.
+        // No sense getting fancy here.
+        logoutAllActivity.logOutAllUsers(id);
+      });
   }
 }

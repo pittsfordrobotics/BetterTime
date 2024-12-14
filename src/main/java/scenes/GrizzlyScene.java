@@ -226,10 +226,9 @@ public class GrizzlyScene {
             if (!(userActivity.isUserLoggedIn(studentIDBox.getText()))) {
               LoggingUtils.log(Level.INFO, "Logging in: " + studentIDBox.getText());
               userActivity.loginUser(studentIDBox.getText());
-
             } else {
               LoggingUtils.log(Level.INFO, "Logging out: " + studentIDBox.getText());
-              userActivity.logoutUser(studentIDBox.getText());
+              userActivity.logoutUser(studentIDBox.getText(), true);
             }
 
           } catch (CancelledUserCreationException e) {
