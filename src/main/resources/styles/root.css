@@ -4,10 +4,9 @@ Main Screen CSS
 
  /* Pink: E616A1 */
  /* Pastel Pink: F2C6DE */  
- /* Pink from image: FF6CD6 */
 #main {
-    -fx-font-family: "Calibri";
-    -fx-background-color: #FF6CD6;
+    -fx-font-family: "Arial";
+    -fx-background-color: #E616A1;
 }
 
 .button {
