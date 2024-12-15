@@ -80,6 +80,7 @@ public class CreditsScene {
 
     root.add(navMenu, 0, 0);
     root.add(mainContent, 0, 1);
+    messageText.setText("");
   }
 
   private void createCreditsUI(GridPane root) {
@@ -147,7 +148,8 @@ public class CreditsScene {
 
   private void logOutAllUsers() {
     String id = idBox.getText();
-    Platform.runLater(() -> idBox.setText(""));
+    idBox.setText("");
+    messageText.setText("");
 
     Runnable logoutAction = () -> {
         logoutAllActivity.logOutAllUsers(id, this::displayMessage);

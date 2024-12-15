@@ -17,7 +17,6 @@ public class LogoutAllActivity {
 
         boolean proceed = alertUtils.createAlert("Confirm", "Log out everyone?", "Please confirm you wish to log out all users.");
         if (!proceed) {
-            alertUtils.createAlert("Cancelled", "Action cancelled", "Logout has been cancelled.");
             return;
         }
 
