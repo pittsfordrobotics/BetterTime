@@ -4,8 +4,6 @@ import databases.DatabaseUtils;
 import helpers.AlertUtils;
 import helpers.CommonUtils;
 import helpers.Constants;
-import helpers.LoggingUtils;
-import java.util.logging.Level;
 
 /**
  * @author Dalton Smith LoginNotifier Checks if user account registration is

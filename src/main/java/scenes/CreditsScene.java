@@ -1,13 +1,13 @@
 package scenes;
 
 import activities.LogoutAllActivity;
-import helpers.AlertUtils;
 import helpers.Constants;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,6 +24,7 @@ public class CreditsScene {
   private LogoutAllActivity logoutAllActivity = new LogoutAllActivity();
   private TextField idBox = new TextField();
   private Button logoutAllButton = new Button("Logout everyone");
+  private Label messageText = new Label("");
 
   // credits panes
   private GridPane upperPaneMain = new GridPane();
@@ -118,31 +119,42 @@ public class CreditsScene {
     GridPane.setHalignment(bottomPaneMain, HPos.CENTER);
     bottomPaneMain.add(credits, 0, 0);
 
+    messageText.setId("messageText");
     advancedOptions.setMaxWidth(500);
     advancedOptions.setAlignment(Pos.CENTER);
     advancedOptions.setId("advancedOptions");
     GridPane.setHalignment(advancedOptions, HPos.CENTER);
     advancedOptions.add(idBox, 0, 0);
     advancedOptions.add(logoutAllButton, 1, 0);
+    advancedOptions.add(messageText, 0, 1);
+  }
+
+  private void displayMessage(String message) {
+    if (Platform.isFxApplicationThread()) {
+      messageText.setText(message);
+    } else {
+      Platform.runLater(() -> messageText.setText(message));
+    }
   }
 
   private void linkHandlers() {
     backButton.setOnAction(
-        event -> {
-          SceneManager.updateScene(Constants.kMainSceneState);
-        });
+        event -> SceneManager.updateScene(Constants.kMainSceneState));
 
     logoutAllButton.setOnAction(
-      event -> {
-        String id = idBox.getText();
-        // This should be running on the main thread, but use runLater anyways.
-        Platform.runLater(() -> idBox.setText(""));
-        // Logging out several users can take several seconds.
-        // We're not running this on a separate thread on purpose.
-        // The UI will freeze while doing this, but since this is an admin action
-        // the user should know what they're doing and expect it.
-        // No sense getting fancy here.
-        logoutAllActivity.logOutAllUsers(id);
-      });
+      event -> this.logOutAllUsers());
+  }
+
+  private void logOutAllUsers() {
+    String id = idBox.getText();
+    Platform.runLater(() -> idBox.setText(""));
+
+    Runnable logoutAction = () -> {
+        logoutAllActivity.logOutAllUsers(id, this::displayMessage);
+    };
+
+    Thread t = new Thread(logoutAction);
+    t.setDaemon(true);
+    t.start();
   }
 }

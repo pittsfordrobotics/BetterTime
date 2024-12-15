@@ -33,14 +33,19 @@ public class AlertUtils {
     // ensure that we always show the dialog on the main UI thread
     if (Platform.isFxApplicationThread()) {
       return customDialog(title, header, content);
-
     } else {
+      AtomicBoolean isDone = new AtomicBoolean();
+      AtomicBoolean dialogResult = new AtomicBoolean();
 
-      AtomicBoolean temp = new AtomicBoolean();
+      Platform.runLater(() -> {
+        boolean result = customDialog(title, header, content);
+        isDone.set(true);
+        dialogResult.set(result);
+      });
 
-      Platform.runLater(() -> temp.set(customDialog(title, header, content)));
+      while (!isDone.get()) {}
 
-      return temp.get();
+      return dialogResult.get();
     }
   }
 
