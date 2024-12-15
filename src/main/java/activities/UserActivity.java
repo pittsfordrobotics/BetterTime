@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import javafx.application.Platform;
+import notifiers.LoginNotifier;
 import scenes.GrizzlyScene;
 
 public class UserActivity {
@@ -20,11 +21,11 @@ public class UserActivity {
    *     login/logout
    */
   private DatabaseUtils dbUtils = new DatabaseUtils();
-
   private AlertUtils alertUtils = new AlertUtils();
 
   private LogoutActivity logoutActivity = new LogoutActivity(dbUtils);
   private LoginActivity loginActivity = new LoginActivity(dbUtils);
+  private LoginNotifier notifier = new LoginNotifier(dbUtils);
 
   private static DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 
@@ -163,13 +164,11 @@ public class UserActivity {
     LocalDateTime loginTime = LocalDateTime.now();
     String formattedLoginTime = loginTime.format(formatter);
 
-    int userRow =
-        dbUtils.getCellRowFromColumn(userID, Constants.kStudentIdColumn, Constants.kMainSheet);
+    int userRow = dbUtils.getCellRowFromColumn(userID, Constants.kStudentIdColumn, Constants.kMainSheet);
 
     // log the user in
     if (userRow != -1) {
       loginActivity.loginUser(userRow, formattedLoginTime);
-
       Platform.runLater(
           () -> {
             GrizzlyScene.setMessageBoxText("Successfully logged in user!");
@@ -179,7 +178,7 @@ public class UserActivity {
   }
 
   // logout the user
-  public void logoutUser(String userID, boolean showReminders) {
+  public void logoutUser(String userID) {
     Platform.runLater(() -> GrizzlyScene.setMessageBoxText("Logging out user!"));
 
     // grab the row the user is on
@@ -246,8 +245,7 @@ public class UserActivity {
             String.format("%02d:%02d:%02d", diffHours, diffMinutes, diffSeconds);
         LocalTime totalHoursTime = LocalTime.parse(totalTimeFromDifference);
 
-        logoutActivity.logoutUser(
-            userID, userRow, totalHoursTime, totalTimeFromDifference, showReminders);
+        logoutActivity.logoutUser(userID, userRow, totalHoursTime, totalTimeFromDifference);
 
         // show user logout text
         Platform.runLater(
@@ -289,6 +287,14 @@ public class UserActivity {
       // not a valid ID
       return false;
     }
+  }
+
+  public void showLoginMessages(String userId) {
+    notifier.showLoginMessages(userId);
+  }
+
+  public void showLogoutMessages(String userId) {
+    notifier.showLogoutMessages(userId);
   }
 
   private ArrayList<String> getAllUserIds() {

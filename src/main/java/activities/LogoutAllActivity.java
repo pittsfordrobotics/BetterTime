@@ -21,7 +21,7 @@ public class LogoutAllActivity {
 
         ArrayList<String> loggedInUsers = userActivity.getLoggedInUsers();
         for (String userId : loggedInUsers) {
-            userActivity.logoutUser(userId, false);
+            userActivity.logoutUser(userId);
         }
 
         alertUtils.createAlert("Done", "Log out completed", "Logged out " + loggedInUsers.size() + " users.");
