@@ -2,9 +2,11 @@
 Main Screen CSS
  */
 
+ /* Pink: E616A1 */
+ /* Pastel Pink: F2C6DE */  
 #main {
-    -fx-font-family: "Calibri";
-    -fx-background-color: #D0BB61;
+    -fx-font-family: "Arial";
+    -fx-background-color: #E616A1;
 }
 
 .button {
@@ -72,8 +74,9 @@ Main Screen CSS
     -fx-border-style: solid;
     -fx-max-width: 250px;
     -fx-padding: 15px;
-    -fx-border-radius: 3px;
-    -fx-background-color: #d9c575;
+    -fx-border-radius: 9px;
+    -fx-background-color: #F2C6DE;
+    -fx-background-radius: 10px;
 }
 
 #hyperlinkBottom {
@@ -96,7 +99,7 @@ Main Screen CSS
 }
 
 #navMenu {
-    -fx-background-color: #d9c575;
+    -fx-background-color: #F2C6DE;
     -fx-padding: 5px;
 }
 
@@ -117,7 +120,7 @@ Credits CSS
 
 #creditsRoot {
     -fx-font-family: "Calibri";
-    -fx-background-color: #D0BB61;
+    -fx-background-color: #F2C6DE;
 }
 
 #summaryText {
@@ -135,21 +138,27 @@ Credits CSS
     -fx-padding: 5px;
 }
 
+#advancedOptions {
+    -fx-font-size: 20px;
+    -fx-padding: 10px;
+	-fx-hgap: 10px;
+}
+
 /*
 Custom Dialog CSS
 */
 
 #customDialog {
-    -fx-background-color: #D0BB61;
+    -fx-background-color: #F2C6DE;
     -fx-padding: 10px;
     -fx-font-size: 16px;
 }
 
 .myDialog{
-    -fx-background-color: #D0BB61;
+    -fx-background-color: #F2C6DE;
 }
 .myDialog > *.button-bar > *.container{
-    -fx-background-color: #D0BB61;
+    -fx-background-color: #F2C6DE;
 }
 
 .myDialog > *.label.content{
@@ -157,7 +166,7 @@ Custom Dialog CSS
     -fx-font-weight: bold;
 }
 .myDialog:header *.header-panel{
-    -fx-background-color: #d9c575;
+    -fx-background-color: #F2C6DE;
 }
 .myDialog:header *.header-panel *.label{
     -fx-font-size: 25px;
@@ -169,10 +178,10 @@ Account Dialog CSS
  */
 
 .accountDialog{
-    -fx-background-color: #D0BB61;
+    -fx-background-color: #F2C6DE;
 }
 .accountDialog > *.button-bar > *.container{
-    -fx-background-color: #D0BB61;
+    -fx-background-color: #F2C6DE;
 }
 
 .accountDialog > *.label.content{
@@ -180,7 +189,7 @@ Account Dialog CSS
     -fx-font-weight: bold;
 }
 .accountDialog:header *.header-panel{
-    -fx-background-color: #d9c575;
+    -fx-background-color: #F2C6DE;
 }
 .accountDialog:header *.header-panel *.label{
     -fx-font-size: 23px;

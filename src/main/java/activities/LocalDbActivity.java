@@ -14,11 +14,9 @@ import org.json.JSONException;
 public class LocalDbActivity {
   public static String kSheetId = "";
   public static boolean kHandsFreeMode = false;
-  public static boolean kUpdateNotifier = true;
   public static int kIdLength = 6;
   public static int kIdLengthFallback = 7;
   public static String kApplicationName = "GrizzlyTime_JavaFX_Edition";
-  public static boolean kGrizzlyVerification = false;
 
   private JSONHelper jsonHelper = new JSONHelper();
   private AlertUtils alertUtils = new AlertUtils();
@@ -33,8 +31,6 @@ public class LocalDbActivity {
       }
 
       kHandsFreeMode = jsonHelper.getKey("handsFreeMode").equalsIgnoreCase("true");
-      kUpdateNotifier = jsonHelper.getKey("updateNotifier").equalsIgnoreCase("true");
-      kGrizzlyVerification = jsonHelper.getKey("grizzlyVerification").equalsIgnoreCase("true");
       kApplicationName = jsonHelper.getKey("applicationName");
 
       try {

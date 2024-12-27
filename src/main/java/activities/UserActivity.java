@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import javafx.application.Platform;
+import notifiers.LoginNotifier;
 import scenes.GrizzlyScene;
 
 public class UserActivity {
@@ -20,19 +21,32 @@ public class UserActivity {
    *     login/logout
    */
   private DatabaseUtils dbUtils = new DatabaseUtils();
-
   private AlertUtils alertUtils = new AlertUtils();
 
   private LogoutActivity logoutActivity = new LogoutActivity(dbUtils);
   private LoginActivity loginActivity = new LoginActivity(dbUtils);
+  private LoginNotifier notifier = new LoginNotifier(dbUtils);
 
   private static DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+
+  public ArrayList<String> getLoggedInUsers() {
+    ArrayList<String> loggedInIds = new ArrayList<>();
+
+    ArrayList<String> ids = getAllUserIds();
+    for (String id : ids) {
+      if (doesIdExist(ids, id) == Constants.kIdLoggedIn) {
+        loggedInIds.add(id);
+      }
+    }
+
+    return loggedInIds;
+  }
 
   // check if user is logged in
   public boolean isUserLoggedIn(String userID) throws Exception {
     dbUtils.getUpdatedData();
 
-    ArrayList<String> ids = dbUtils.getColumnData(0, Constants.kMainSheet);
+    ArrayList<String> ids = getAllUserIds();
 
     int state = doesIdExist(ids, userID);
 
@@ -67,9 +81,7 @@ public class UserActivity {
 
       int blankRow = dbUtils.nextEmptyCellColumn(Constants.kMainSheet);
       addUserInfoBasic(userData, userID, data, blankRow);
-      data.add(new BatchUpdateData(blankRow, Constants.kEmailColumn, userData.get(3)));
-      data.add(new BatchUpdateData(blankRow, Constants.kRoleColumn, userData.get(5)));
-      data.add(new BatchUpdateData(blankRow, Constants.kGenderColumn, userData.get(4)));
+      data.add(new BatchUpdateData(blankRow, Constants.kRoleColumn, userData.get(3)));
 
       dbUtils.setCellDataBatch(data, Constants.kMainSheet);
       dbUtils.getUpdatedData();
@@ -100,10 +112,24 @@ public class UserActivity {
   }
 
   private void addUserInfoBasic(
-      ArrayList<String> userData, String userID, ArrayList<BatchUpdateData> data, int i) {
+    ArrayList<String> userData, String userID, ArrayList<BatchUpdateData> data, int i) {
     data.add(new BatchUpdateData(i, Constants.kStudentIdColumn, userID));
     data.add(new BatchUpdateData(i, Constants.kFirstNameColumn, userData.get(1)));
     data.add(new BatchUpdateData(i, Constants.kLastNameColumn, userData.get(2)));
+  }
+
+  public boolean isMentorId(String userId) {
+    dbUtils.getUpdatedData();
+    ArrayList<String> ids = getAllUserIds();
+    for (int i = 0; i < ids.size(); i++) {
+      if (ids.get(i).equals(userId)) {
+        String mentorData = dbUtils.getCellData(i, Constants.kRoleColumn, Constants.kMainSheet);
+        return "MENTOR".equalsIgnoreCase(mentorData);
+      }
+    }
+
+    // not found
+    return false;
   }
 
   public int doesIdExist(ArrayList<String> ids, String userID) {
@@ -114,7 +140,6 @@ public class UserActivity {
         String cellData = dbUtils.getCellData(i, Constants.kLoggedInColumn, Constants.kMainSheet);
         try {
           cellData = cellData.replaceAll("\\s+", "");
-
         } catch (NullPointerException e) {
           continue;
           // do nothing because the cell doesn't exist?
@@ -122,7 +147,6 @@ public class UserActivity {
 
         if (cellData.equals("TRUE")) {
           return Constants.kIdLoggedIn;
-
         } else {
           return Constants.kIdNotLoggedIn;
         }
@@ -140,13 +164,11 @@ public class UserActivity {
     LocalDateTime loginTime = LocalDateTime.now();
     String formattedLoginTime = loginTime.format(formatter);
 
-    int userRow =
-        dbUtils.getCellRowFromColumn(userID, Constants.kStudentIdColumn, Constants.kMainSheet);
+    int userRow = dbUtils.getCellRowFromColumn(userID, Constants.kStudentIdColumn, Constants.kMainSheet);
 
     // log the user in
     if (userRow != -1) {
       loginActivity.loginUser(userRow, formattedLoginTime);
-
       Platform.runLater(
           () -> {
             GrizzlyScene.setMessageBoxText("Successfully logged in user!");
@@ -223,8 +245,14 @@ public class UserActivity {
             String.format("%02d:%02d:%02d", diffHours, diffMinutes, diffSeconds);
         LocalTime totalHoursTime = LocalTime.parse(totalTimeFromDifference);
 
-        logoutActivity.logoutUserWithHours(
-            userID, userRow, totalHoursTime, totalTimeFromDifference);
+        logoutActivity.logoutUser(userID, userRow, totalHoursTime, totalTimeFromDifference);
+
+        // show user logout text
+        Platform.runLater(
+          () -> {
+            GrizzlyScene.setMessageBoxText("Logged out user!");
+            GrizzlyScene.clearInput();
+          });
       }
 
       // logout the user
@@ -259,5 +287,17 @@ public class UserActivity {
       // not a valid ID
       return false;
     }
+  }
+
+  public void showLoginMessages(String userId) {
+    notifier.showLoginMessages(userId);
+  }
+
+  public void showLogoutMessages(String userId) {
+    notifier.showLogoutMessages(userId);
+  }
+
+  private ArrayList<String> getAllUserIds() {
+    return dbUtils.getColumnData(0, Constants.kMainSheet);
   }
 }

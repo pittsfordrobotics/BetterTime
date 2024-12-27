@@ -4,18 +4,16 @@ import activities.LocalDbActivity;
 
 public class Constants {
   // spreadsheet layout
-  public static final int kEthnicityColumn = 11;
-  public static final int kLoggedInColumn = 10;
-  public static final int kTotalHoursColumn = 9;
-  public static final int kHoursColumn = 8;
-  public static final int kLastLogoutColumn = 7;
-  public static final int kLastLoginColumn = 6;
   public static final int kStudentIdColumn = 0;
   public static final int kFirstNameColumn = 1;
   public static final int kLastNameColumn = 2;
-  public static final int kGenderColumn = 5;
-  public static final int kRoleColumn = 4;
-  public static final int kEmailColumn = 3;
+  public static final int kRoleColumn = 3;
+  public static final int kLastLoginColumn = 4;
+  public static final int kLastLogoutColumn = 5;
+  public static final int kHoursColumn = 6;
+  public static final int kTotalHoursColumn = 7;
+  public static final int kLoggedInColumn = 8;
+  public static final int kImportantMessageColumn = 9;
 
   // camera feed size
   public static final int kCameraHeight = 400;
@@ -26,7 +24,7 @@ public class Constants {
   // sheet codes
   public static final int kMainSheet = 0;
   public static final int kLogSheet = 1;
-  public static final int kRegistrationSheet = 2;
+//   public static final int kRegistrationSheet = 2;
 
   // configuration locations
   public static final String kConfigName = "config.json";
@@ -37,7 +35,7 @@ public class Constants {
   public static final String kApplicationIcon = "images/icon.png";
   public static final String kBearImage = "images/bear.png";
   public static final String kErrorImage = "images/error.png";
-  public static final String kSplashImage = "images/splash.jpg";
+  public static final String kSplashImage = "images/splash.png";
 
   // alert ui constants
   public static final int kBearImageWidth = 50;

@@ -33,14 +33,19 @@ public class AlertUtils {
     // ensure that we always show the dialog on the main UI thread
     if (Platform.isFxApplicationThread()) {
       return customDialog(title, header, content);
-
     } else {
+      AtomicBoolean isDone = new AtomicBoolean();
+      AtomicBoolean dialogResult = new AtomicBoolean();
 
-      AtomicBoolean temp = new AtomicBoolean();
+      Platform.runLater(() -> {
+        boolean result = customDialog(title, header, content);
+        isDone.set(true);
+        dialogResult.set(result);
+      });
 
-      Platform.runLater(() -> temp.set(customDialog(title, header, content)));
+      while (!isDone.get()) {}
 
-      return temp.get();
+      return dialogResult.get();
     }
   }
 
@@ -243,7 +248,7 @@ public class AlertUtils {
     // GridPane.setHgrow(firstName, Priority.ALWAYS);
     TextField lastName = new TextField("");
 
-    TextField email = new TextField("");
+    // TextField email = new TextField("");
 
     firstName.setId("textField");
     lastName.setId("textField");
@@ -251,75 +256,14 @@ public class AlertUtils {
     firstName.setPromptText("");
     lastName.setPromptText("");
 
-    email.setPromptText("");
-
-    email.setId("textField");
-
-    ToggleGroup studentRadioGroup = new ToggleGroup();
-
-    RadioButton mentorRadio = new RadioButton("Mentor");
-    RadioButton studentRadio = new RadioButton("Student");
-
-    ToggleGroup genderRadioGroup = new ToggleGroup();
-
-    RadioButton maleRadio = new RadioButton("Male");
-    RadioButton otherRadio = new RadioButton("Other");
-    RadioButton femaleRadio = new RadioButton("Female");
-
-    otherRadio.fire();
-
-    studentRadio.fire();
-
-    mentorRadio.setToggleGroup(studentRadioGroup);
-    studentRadio.setToggleGroup(studentRadioGroup);
-
-    GridPane genderPane = new GridPane();
-
-    maleRadio.setToggleGroup(genderRadioGroup);
-    femaleRadio.setToggleGroup(genderRadioGroup);
-    otherRadio.setToggleGroup(genderRadioGroup);
-
-    genderPane.add(maleRadio, 0, 0);
-    genderPane.add(femaleRadio, 1, 0);
-    genderPane.add(otherRadio, 2, 0);
-
     grid.add(new Label("First Name:"), 0, 0);
     grid.add(firstName, 1, 0);
     grid.add(new Label("Last Name:"), 0, 1);
     grid.add(lastName, 1, 1);
-    grid.add(new Label("Email:"), 0, 2);
-    grid.add(email, 1, 2);
-
-    GridPane.setColumnSpan(genderPane, 2);
-    grid.add(genderPane, 0, 3);
 
     GridPane.setHalignment(grid, HPos.CENTER);
 
-    GridPane.setHalignment(studentRadio, HPos.CENTER);
-    GridPane.setHalignment(studentRadio, HPos.CENTER);
-
-    grid.add(studentRadio, 0, 4);
-    grid.add(mentorRadio, 1, 4);
-
     dialog.getDialogPane().setContent(grid);
-
-    Node button = dialog.getDialogPane().lookupButton(loginButtonType);
-
-    button.setDisable(true);
-
-    email
-        .textProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              Pattern regex =
-                  Pattern.compile(
-                      "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-              Matcher matcher = regex.matcher(newValue);
-
-              if (matcher.matches()) {
-                button.setDisable(false);
-              }
-            });
 
     // Request focus on the firstname field by default.
     Platform.runLater(firstName::requestFocus);
@@ -334,18 +278,9 @@ public class AlertUtils {
       data.add("TRUE");
       data.add(firstName.getText());
       data.add(lastName.getText());
-      data.add(email.getText());
 
-      if (maleRadio.isSelected()) {
-        data.add("MALE");
-      } else if (femaleRadio.isSelected()) {
-        data.add("FEMALE");
-      } else {
-        data.add("OTHER");
-      }
-
-      data.add(mentorRadio.isSelected() ? "MENTOR" : "STUDENT");
-
+      // All new users are students unless manually updated in the spreadsheet
+      data.add("STUDENT");
     } else {
       data.add("FALSE");
     }

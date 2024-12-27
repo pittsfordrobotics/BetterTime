@@ -65,7 +65,6 @@ public class GrizzlyScene {
     // check for custom splash
     if (file.exists()) {
       splash = new Image(file.toURI().toString());
-
     } else {
       splash = new Image(Constants.kErrorImage);
     }
@@ -220,17 +219,20 @@ public class GrizzlyScene {
             return;
           }
 
+          String userId = studentIDBox.getText();
           // attempt login/logout and or account creation
           // do nothing if account creation was cancelled
           try {
             // check if the user is logged in, and that user exists
-            if (!(userActivity.isUserLoggedIn(studentIDBox.getText()))) {
-              LoggingUtils.log(Level.INFO, "Logging in: " + studentIDBox.getText());
-              userActivity.loginUser(studentIDBox.getText());
+            if (!(userActivity.isUserLoggedIn(userId))) {
+              LoggingUtils.log(Level.INFO, "Logging in: " + userId);
+              userActivity.loginUser(userId);
+              userActivity.showLoginMessages(userId);
 
             } else {
-              LoggingUtils.log(Level.INFO, "Logging out: " + studentIDBox.getText());
-              userActivity.logoutUser(studentIDBox.getText());
+              LoggingUtils.log(Level.INFO, "Logging out: " + userId);
+              userActivity.logoutUser(userId);
+              userActivity.showLogoutMessages(userId);
             }
 
           } catch (CancelledUserCreationException e) {

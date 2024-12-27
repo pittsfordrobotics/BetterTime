@@ -1,52 +1,54 @@
 package notifiers;
 
 import databases.DatabaseUtils;
+import helpers.AlertUtils;
+import helpers.CommonUtils;
 import helpers.Constants;
-import helpers.LoggingUtils;
-import java.util.ArrayList;
-import java.util.logging.Level;
 
 /**
- * @author Dalton Smith LoginNotifier Checks if user account registration is complete, this code is
- *     Grizzly Robotics specific
+ * @author Dalton Smith LoginNotifier Checks if user account registration is
+ *         complete, this code is
+ *         Grizzly Robotics specific
  */
 public class LoginNotifier {
-  public boolean checkNotifier(int studentIDRow, DatabaseUtils dbUtils) {
-    String firstName =
-        dbUtils.getCellData(studentIDRow, Constants.kFirstNameColumn, Constants.kMainSheet);
-    String lastName =
-        dbUtils.getCellData(studentIDRow, Constants.kLastNameColumn, Constants.kMainSheet);
+  private DatabaseUtils dbUtils;
 
-    ArrayList<String> firstNamesListReg = dbUtils.getColumnData(0, Constants.kRegistrationSheet);
-    ArrayList<String> lastNamesListReg = dbUtils.getColumnData(1, Constants.kRegistrationSheet);
+  private AlertUtils alertUtils = new AlertUtils();
+  private CommonUtils utils = new CommonUtils();
 
-    // check if first and last names are found
-    if (matchName(firstName, firstNamesListReg)) {
-      LoggingUtils.log(Level.INFO, firstName + " was detected in user registration");
-      if (matchName(lastName, lastNamesListReg)) {
-        LoggingUtils.log(Level.INFO, lastName + " was detected in user registration");
-        return true;
-      }
-
-      LoggingUtils.log(Level.INFO, lastName + " was not detected in user registration");
-
-      return false;
-    }
-
-    LoggingUtils.log(Level.INFO, firstName + " was not detected in user registration");
-
-    return false;
+  public LoginNotifier(DatabaseUtils dbUtils) {
+    this.dbUtils = dbUtils;
   }
 
-  private boolean matchName(String name, ArrayList<String> nameList) {
-    name = name.toLowerCase();
+  public void showLoginMessages(String userId) {
+    String msg = getMessageForUserId(userId, dbUtils);
 
-    for (String nameInList : nameList) {
-      if (nameInList.equalsIgnoreCase(name)) {
-        return true;
-      }
+    if (msg == null || msg == "") {
+      return;
     }
 
-    return false;
+    utils.playDing();
+    alertUtils.createAlert("Important message!", "Important message!", msg);
+  }
+
+  public void showLogoutMessages(String userId) {
+    String msg = getMessageForUserId(userId, dbUtils);
+
+    if (msg == null || msg == "") {
+      return;
+    }
+
+    utils.playDing();
+    alertUtils.createAlert("Reminder!", "Did you remember?", msg);
+  }
+
+  private String getMessageForUserId(String userId, DatabaseUtils dbUtils) {
+    int userRow = dbUtils.getCellRowFromColumn(userId, Constants.kStudentIdColumn, Constants.kMainSheet);
+    if (userRow == -1) {
+      // Not found
+      return null;
+    }
+
+    return dbUtils.getCellData(userRow, Constants.kImportantMessageColumn, Constants.kMainSheet);
   }
 }
