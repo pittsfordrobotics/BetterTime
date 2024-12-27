@@ -23,7 +23,7 @@ public class LogoutAllActivity {
         displayMessage.accept("Finding logged in users...");
         ArrayList<String> loggedInUsers = userActivity.getLoggedInUsers();
         for (int i = 0; i < loggedInUsers.size(); i++) {
-            displayMessage.accept("Logging out user " + i + " of " + loggedInUsers.size());
+            displayMessage.accept("Logging out user " + (i + 1) + " of " + loggedInUsers.size());
             String userId = loggedInUsers.get(i);
             userActivity.logoutUser(userId);
         }
