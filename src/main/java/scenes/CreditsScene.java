@@ -144,6 +144,8 @@ public class CreditsScene {
 
     logoutAllButton.setOnAction(
       event -> this.logOutAllUsers());
+
+    idBox.setOnAction(event -> this.logOutAllUsers());
   }
 
   private void logOutAllUsers() {

@@ -92,6 +92,14 @@ public class AlertUtils {
     ButtonType confirmButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
     dialog.getDialogPane().getButtonTypes().addAll(confirmButton, ButtonType.CANCEL);
 
+    // Set the OK button as the default
+    Button okButton = (Button) dialog.getDialogPane().lookupButton(confirmButton);
+    if (okButton == null) {
+      LoggingUtils.log(Level.SEVERE, "Could not find OK button in custom dialog");
+    } else {
+      okButton.setDefaultButton(true);
+    }
+    
     Image image = new Image(Constants.kBearImage);
     ImageView imageView = new ImageView(image);
 
